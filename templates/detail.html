@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail</title>
+</head>
+<body>
+    
+    {% if blog is not None %}
+    <h4>{{ blog.user.username }}</h4>
+    <h2>{{ blog.title }}</h2>
+    <p>{{ blog.description }}</p>
+    <img src="{{ blog.image.url }}" alt="">
+
+    <div>
+        <a href="{% url 'delete_blog' blog.id %}" style="color: red;">Удалить</a>
+        <a href="{% url 'update_blog' blog.id %}" style="color: green;">Обновить</a>
+    </div>
+    {% else %}
+    <h1>Not Found Object</h1>
+    {% endif %}
+
+    <div>
+        {% for comment in blog.comments.all %}
+        <h3>{{ comment.user.username }}</h3>
+        <p>{{ comment.text }}</p>
+        <a href="{% url 'delete_comment' comment.id %}" style="color: orange;">УДАЛИТЬ</a>
+        <a href="{% url 'update_comment' comment.id %}" style="color: grey;">ОБНОВИТЬ</a>
+        {% endfor %}
+    </div>
+
+    <div>
+        <form action="{% url 'detail_blog' blog.id %}" method="post">
+            {% csrf_token %}
+            <label for="text">Текст</label>
+            <input type="text" name="text">
+
+            <button type="submit">Добавить комментарий</button>
+        </form>
+    </div>
+
+</body>
+</html>
